@@ -1,532 +1,578 @@
 
-# Grocery App (React)
 
-## Features
-- Component based architecture
-- Product filtering (Top rated)
-- State management using useState
-- Modular folder structure
+# React Learning – useEffect, State & Shimmer UI
 
-## Tech Used
+## 📌 Concepts Covered
+- Monolith vs Microservices
+- useEffect Hook
+- API Fetching
+- CORS Issue
+- Shimmer UI
+- Conditional Rendering
+- useState vs useRef
+- Search Filtering
+
+## ⚙️ Tech Stack
 - React
 - JavaScript
-- Vite
+- CSS
 
-## Concepts Practiced
-- React Hooks (useState)
-- Component reusability
-- Props drilling
-- Array methods (filter/map)
-- Folder structuring (industry standard)
+## 🚀 Features
+- Fetch API data
+- Search functionality
+- Shimmer loading UI
+- Dynamic rendering
 
-## How to run
-npm install
-npm run dev
+## 🧠 Key Learnings
+- useEffect runs after render
+- State triggers re-render
+- Controlled inputs require onChange
+- Separation of concerns in architecture
 
+## 🔍 Search Functionality
 
-## vidoe 5 lets get hooked full notes:
+This app includes a dynamic search feature:
 
-Its not good pratice to keep all things in one file. Make separate file for seperate things. 
+- Users can type in the search bar
+- Input is controlled using React state
+- Products are filtered in real-time based on user input
+- Filtering is case-insensitive
 
-Break our app into multiple files. Let us destructure our app. 
+### 🧠 Implementation Details
 
-Visit given link and read the react answer about structuring files:
+- Used `useState` to store search text
+- Used `onChange` to update input value
+- Applied `.filter()` on product list
+- Used `.includes()` for matching titles
 
-https://legacy.reactjs.org/docs/faq-structure.html
-
-All the code files are loacted in src file folder. 
-
-1. We have almost 4 components which are in one file we have to create one folder for one component.
-2. When we separrate the components into separate files then how to use them? The answer is by using import export. First always write export then write import. 
-3. If you are making component file write the same name as your component name 
-4. When you are importing lot of people write the full name of file like import Header from "./components/Header.jsx"; Its okay to write but no need to write jsx or js etc
-5. Whenever you have hardcoded data or mock data never keep it in component file This is industry standard
-6. One more thing is also hard coded data which is url in our app. and we have to keep it in separate file. 
-
-<img className="logo" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdORZOyvu57qJGM6Zx9lMy2KwhB8cwUN0_CQ&s" />
-
-Never keep hard coded string in component file. common pratice is to keep it in seprate file like utils or constants or common 
-
-### Methods of using Import & Export:
-
-There are two methods of using import & export
-
-1. using default export/import
-2. using name export
-
-### Using  default export/import:
-
-  export default component 
-
-  import component from “path” 
-
-### Using name export:
-
-export const component 
-
-import {component }from “path”
-
-```
- In one file we can use only one export we can not write export twice it will throw an error
-
-  Throws error:
-  export default LOGO_URL
-  export default LOGO_URL
-
-  IF we have to export multiple things then how we can export them ? 
-   - Then we use something as name export 
-
-   How to use this:
-   You can just to write export infront of your variable or constant whatever you have
-   Like this one:
-```
+### 💡 Code Snippet
 
 ```jsx
-export const LOGO_URL =
-  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdORZOyvu57qJGM6Zx9lMy2KwhB8cwUN0_CQ&s";
+const [searchText, setSearchText] = useState("");
 
-```
+<input
+  type="text"
+  value={searchText}
+  onChange={(e) => setSearchText(e.target.value)}
+/>
 
-```jsx
-This is how you can export multiple things from one file
-The question is how i will import it?
-  There would be a slight difference in import 
-  You have to write it in { } curly braces
-```
+const filteredProducts = productList.filter((res) =>
+  res.title.toLowerCase().includes(searchText.toLowerCase())
+);
 
- import { LOGO_URL } from "../../public/utils/constants";
+                          ### Vidoe 6: Exploring the world:
 
-```jsx
-if we have used default export then we don't use curly braces in import
-  how to use this:
-```
+# Part 1:
 
-```jsx
-<img className="logo" src={LOGO_URL} />
-  always write it in curly braces not in double quetation because it is constant
+### Monolith & Microservice architecture:
 
-```
+1. Monolith:
+
+Earlier we use to  have a big project. suppose we have building an app. 
+
+We have Api in the project . Ui in the same project. also Database , SMS handling in the same project. All the code in the same project. if we have to make any changes like edit the button we have to compile the whole project and deploy the whole project. This is monolith architecture. All big compaines preferring microservice architecture.
+
+1. Microservices:
+
+In microservice architercture we have different services for different job like we have service like backend servie , Ui project, service which connect to database which maintain database, service for sms sending or email sending. These are microservices. All these services combined to make a big app. We have separate projects for separate things , This is known as (**separation of concerns**).  
+
+It follows single responsibility principle. With these all teams work and maintains its own work.
+
+How are services deployed ?
+
+Assume our project is Ui microservice and it is written in react. One more advantage of microservice architecture is we can right our microservice archirtecture in any language we want like Ui in react , Database in python. 
+
+### One more thing is how these services interact with each other?
+
+There are different types of connections between services. 
+
+All the services are run on their specific port . On different ports we can deploy different services. 
 
 Example:
 
-```jsx
-(in constants file)
-export const IMG_URL =
-"https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp"
+like assume our project host: port 5173 =⇒ for Ui service
 
-export const THUMBNAIL_URL=
-   "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp"
+                                   port 1000 =⇒ for sms service  
 
-```
-
-```jsx
-(in body component)
-import { IMG_URL } from "../../public/utils/constants";
-import { THUMBNAIL_URL } from "../../public/utils/constants";
-
-      images: [
-      [IMG_URL],
-      ],
-      thumbnail:
-      THUMBNAIL_URL
-```
+How they interact: =⇒ They make call to different Urls 
 
 # Part 2:
 
-We add a button of top rating products and also add a click event:
+Best approach (When web page loads =⇒ render =⇒ fetch Api =⇒ re render)
+
+useEffect is best for this purpose and we fetch data in useEffect.
+
+### useEffect hook:
+
+useEffect comes from react library and imported as name import. 
+
+In useEffect we have to pass two parameters one is callback function and other is dependency to add.
+
+Syntax:
 
 ```jsx
-<div className="filter">
-        <button className="filter-btn" onClick={() => console.log("Clicked")}>
-          Top Rated Products
-        </button>
-      </div>
+
+useEffect(()=>{},[])
 
 ```
 
-### Our goal is that when we click on button our top rated products(rating>4) shows on web page
+The important question is which is called first our component or callback function  
 
-Lets make our own product list to understand better:
-
-```jsx
-// This is normal js variable
-import Product from "./Product";
-
-import { IMG_URL } from "../../public/utils/constants";
-import { THUMBNAIL_URL } from "../../public/utils/constants";
-
-  let productListJs = [
-    {
-      id: 1,
-      title: "Essence Mascara Lash Princess",
-      category: "beauty",
-      price: 9.99,
-      rating: 2.56,
-      stock: 99,
-      images: [
-      [IMG_URL],
-      ],
-      thumbnail:
-      THUMBNAIL_URL
-    },
-    {
-      id: 2,
-      title: "Eyeshadow Palette with Mirror",
-      price: 19.99,
-      rating: 2.86,
-      stock: 34,
-
-      images: [
-        "https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/1.webp",
-      ],
-      thumbnail:
-        "https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/thumbnail.webp",
-    },
-  ];
-```
-
-Now onclick we have to filter our products and shows only top rated products :
+look:
 
 ```jsx
-<div className="filter">
-        <button
-          className="filter-btn"
-          onClick={() => {
-            const filteredList = productListJs.filter(
-              (product) => product.rating > 4,
-            );
-            console.log(filteredList);
-          }}
-        >
-          Top Rated Products
-        </button>
-      </div>
+
+useEffect(()=>{
+  console.log("after rendering all stuff useEffect is  called")
+},[])
+console.log("First body component will be called")
 ```
 
-The following code will show our products on web :
+Working:
+
+When we write this function in our body component first our body component code will be rendered and when render cycle is finished then useEffect callback function will be called. 
+
+### If you have to do something after rendering the component you have to write inside useEffect. (This is the purpose of useEffect)
+
+Pratical look:
+
+Go to inspect and go to sources and and put 2 debuggers on following given lines
+
+1. console.log("useEffect called") 
+2. <div className="body">
+
+now pause when we rendered our bod component we saw the skeleton  and now check console you dont saw the called message 
+
+now pause again and you see the message we write in console.
+
+conslusion is =⇒ first component will be rendered then useEffect call back function will be called.
+
+We use fetch function for fetching data and this feature is given us by the browser
+
+What fetch returns =⇒ it returns a promise. how we get this by try cath method or by async await mehtod. use async await for better experience. 
+
+so our code is :
 
 ```jsx
- <div className="super-saver">
-        {productListJs.map((product) => (
-          <Product key={product.id} groData={product} />
-        ))}
-      </div>
-    </div>
-```
-
-Now go to console and check. After clicking on the button we have our top rated products from our list were on console in the form of object. Our data is filtered but our ui does not updated.
-
+const fetchData=async()=>{
+  const data = await fetch("https://world.openfoodfacts.org/api/v2/search?search_terms=milk&page_size=5",
+      { headers: { "User-Agent": "grocerryApp/1.0 (shahzadgull@5059gmail.com)" } }
+    );
+    const json= await data.json()
+    console.log(json)
  
+}
 
-### How to update our Ui automatically? (if my list changes it automatically changes our Ui how to do this?)
+useEffect(()=>{
+  fetchData();
+},[])
 
-This is the super power which react has. react is fast in dom manipulation 
+```
 
-If my data changes my Ui will change. why react is fast? Because it can do faster dom manipulation
+When we check console we saw cors error. 
 
-If we click on button our list will be updating but our UI is not changing. Our Ui will change according to the data. It should automatically change. Do react give us this super power?
+Access to fetch at 'https://world.openfoodfacts.org/api/v2/search?search_terms=milk&page_size=5' from origin '[http://localhost:5173](http://localhost:5173/)' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
 
-Now our product list variable is normal js variable and we want to create a super powerful variable which is know as state variable.
+To solve this problem we have to install core chrome extension. we can also on off from options.
 
- state variable =⇒ super powerful variable 
+Now saw our console and we saw our fetched data.
 
-### How do we create state var? For that we use react hook .
+We fetched the data now we have to re render it 
 
-What is react hook ? =⇒ normal javasrcipt function given by react. It is prebuild(function is utility function which has some logic )
+for updating our list and ui :
 
-### React Hooks:
+setproductList(json.products);
 
-Normal js functions/ Normal js utility functions (written by facebook developers. written inside react)
+### The problem we are facing is that we have not a good free api, We learned the method how to fetch data instead of using real api now lets switch to dummy api
 
-There are multiple react hooks but 2 very imp hooks are given below:
+```jsx
+const data = await fetch(
+      "https://dummyjson.com/products/category/groceries",
+    );
+```
 
-1. useState()
-2. useEffect()
+Now our Ui is updated when we refresh our browser page we saw our old products for one second. This is because we are using groProduct list which is also dummy data. lets remove it. 
 
-### How to use?
+Also del mockdata file we no longer need this.
 
-### 1. useState =⇒ Use to create state variable =⇒ powerful variable
+```jsx
+// optional chaining
+    setproductList(json?.products);
+```
 
-First of all we need to import useState from react. How we will import it? Import like a named import.  we have imported react. React is imported as default import
+When we refresh our web page we saw blank page for less than one second 
+
+Lets show some like loading .. for this time period.
+
+```jsx
+if(productList.length===0){
+    return <h3>loading.....</h3>
+  }
+```
+
+but is showing a loading spinner is good way ? Answer is NO:
+
+Lets work with industry standard :
+
+### Concept of Shimmer Ui :
+
+What is Shimmer Ui? 
+
+It resembels the page as actual Ui. like it laods the fake page until we get actual data from the api. 
+
+Instead of showing loading we can show a fake skeleton. like we can show fake cards till the data is gotten.
+
+Pratical look =⇒ Go to any web and refresh the page you will saw the shimmer ui for a second
+
+ This is much better user experience. 
+
+Youtube also uses this Ui. 
+
+### Always when you are building an app and your api taking some time load a shimmer Ui quickly.
+
+Lets build a simple shimmer Ui for our web:
+
+Shimmer component:
+
+```jsx
+const Shimmer = () => {
+  const cards = [];
+  for (let i = 0; i < 30; i++) {
+    cards.push(<div key={i} className="shimmer-card"></div>);
+  }
+
+  return <div className="shimmer-container">{cards}</div>;
+};
+export default Shimmer;
+
+```
+
+In body component:
+
+```jsx
+ if(productList.length===0){
+    return <Shimmer/>
+  }
+```
+
+This is simple Ui we can make it more fancy. 
+
+### Part 5 of video:
+
+### Conditional rendering
+
+For displaying shimmer effect we wrote a condition which is given above also 
+
+Rendering on the basis of condition is called conditional rendering. 
+
+We can also write this codition and club our code by using **ternary operator.**
+
+ little code as demo. So if we have to merge them both we will use ternary operator
+
+```
+if(productList.length===0){
+    return <Shimmer/>
+  }
+  return (
+    <div className="body">
+```
+
+Lets see how to do this:
+
+```jsx
+return productList.length===0 ? <Shimmer/>
+     : 
+      (
+    <div className="body"> ....... next code lines..
+```
+
+### Dev are confused about useState , like we have normal var why we create and even need useState var:
+
+Dev don’t know that why we use local state variable. and what is the ability of local state var that normal javascript variable do not have?
+
+### Why we use useState var ?
+
+To understand better lets learn with example. 
+
+lets build a little feature in our app of login/logout. When we click on button our login turns to logout and when we again click on button our logout turns into login. Lets do it. 
+
+ lets add a button in our header:
+
+<button className="login-btn">login</button>
+
+So when we write code for this logic We will saw an error that we can not access the value after rendering the component.
+
+```jsx
+const Header = () => {
+  let btnName = "Login"
+  return (
+  <div className="nav-items">
+  <ul>
+  
+  <button className="login-btn" onClick={()=>{btnName="Logout"}}>{btnName}</button>
+   </ul>
+   </div>
+   );
+};
+
+export default Header;
+```
+
+Now we have an error which states following lines:
+
+Error: Cannot reassign variable after render completes
+
+Reassigning `btnName` after render has completed can cause inconsistent behavior on subsequent renders. Consider using state instead.
+
+### To solve this problem and also don’t use useState the solution is useRef:
+
+### useRef:
+
+It is also a hook. we have to import it from react as named import. 
+
+useRef stores the values but not changes the Ui like no re render
+
+`useRef` does NOT trigger re-render
+
+If our goal is just to store value then we will use useRef. 
+
+### How to use It:
+
+When we write:
+
+const btnName = useRef("Login");
+
+when we use useRef react does not give us the normal variable it gives us an **object** like this:
+
+```
+{
+current:"Login"
+}
+```
+
+So:
+
+- `btnName` = the whole object
+- `btnName.current` = the actual value
+
+## Why `.current` exists
+
+React needs a way to:
+
+- Store a value
+- Keep it **persistent between renders**
+- Without causing re-render
+
+So it wraps your value inside an object → `current`
+
+Now use useRef in our code:
+
+```jsx
+import{useRef} from "react"
+const Header = () => {
+ let btnName = useRef("Login")
+  return (
+  <div className="nav-items">
+  <ul>
+  
+ <button className="login-btn" onClick={()=>{
+            btnName.current="Logout"
+            console.log(btnName.current)
+            }}>
+            login
+            </button>
+   </ul>
+   </div>
+   );
+};
+
+export default Header;
+```
+
+I know this is not a normal variable but i found this solution to store the value otherwise it gives us error becuse of react principles. 
+
+### So don’t wasting any time we have to do this with useState
 
 ```jsx
 import{useState} from "react"
 
+const Header = () => {
+  const [btnNameReact,setbtnNameReact]=useState("login");
+  return (
+  <div className="nav-items">
+  <ul>
+  
+  <button className="login-btn" onClick={()=>{
+            setbtnNameReact("Logout")
+            console.log(btnNameReact)
+          }
+            }>{btnNameReact}</button>
+   </ul>
+   </div>
+   );
+};
+
+export default Header;
 ```
 
-### How to create a local state variable?
+As it is local state variable whenever 
 
-local =⇒ means its access is only in component
+### Whenever state variable will changed react will re render the component like in this case header component .
 
-Whenever you write useState() its creates a variable. how do you receive this var inside array []
+### Now the question is: is react refreshing our whole header component or only  refreshing the button?
+
+Is it rendering the whole header again or just rendering the button?
+
+When you see code in console and in elements see the button elements when we clicks on button it shows some changes on button. What you think about that react is rendering only button ?
+
+### The answer is: react is doing whole component re render quickly.
+
+Prove:
+
+lets write console statment in our header component:
+
+  console.log("Header rendered")
+
+now see in console we will saw this message. now click on login button and see console it will show again this message 
+
+It means whole component is re rendered quickly.
+
+### Another question is: Is this is const variable how the value changes ? how the value is updated?
 
 ```jsx
-// Local state Variable
-const [productList]=useState([]);
 
+  const [btnNameReact,setbtnNameReact]=useState("login");
 ```
 
-Let give some data to our useState:
+is btnNameReact is constant varibale then how can we constant variable?
+
+The Answer is:
+
+Whenever we update the btnNameReact variable react is updating this variable and it is calling this header function once again(rendering the function once again) but this time when you envoke header function this btnNameReact variable is new variable. This variable is different than the older variable and when new variable is created it is not created by default value it is created by updated value.
+
+Now lets make our button to toggle button:
 
 ```jsx
-const [productList]=useState([{
-      id: 1,
-      title: "Essence Mascara Lash Princess",
-      category: "beauty",
-      price: 9.99,
-      rating: 2.56,
-      stock: 99,
-      images: [IMG_URL],
-      thumbnail: THUMBNAIL_URL,
-    },
-    {
-      id: 2,
-      title: "Eyeshadow Palette with Mirror",
-      price: 19.99,
-      rating: 4.3,
-      stock: 34,
-
-      images: [
-        "https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/1.webp",
-      ],
-      thumbnail:
-        "https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/thumbnail.webp",
-    },
-    {
-      id: 6,
-      title: "Eyeshadow Palette with Mirror",
-      price: 19.99,
-      rating: 4.3,
-      stock: 34,
-
-      images: [
-        "https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/1.webp",
-      ],
-      thumbnail:
-        "https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/thumbnail.webp",
-    },]);
-
+<button className="login-btn" onClick={()=>{
+            btnNameReact === "Login" ?setbtnNameReact("Logout"):setbtnNameReact("Login")
+            console.log(btnNameReact)
+          }
+            }>{btnNameReact}</button>
 ```
 
-State variable acts like normal js. It renders 3 products on the web page according to given data 
+### Part 6 of video:
 
-### Because it is special state/react variable How to modify it?
+if search === “” then re render my all cards again
 
-We can not modify it like normally we do:
+Lets add a search feature. 
 
-productList=[];
+To get data from input box we need to take value and bind the input box to local state var. 
 
-This is not correct. Then how we will modify it?
-
-### We will modify/update it by function and it comes as second parameter. (add set with the state variable name)
-
-We can name whatever we wish but it is good pratice to write same as state variable name
-
-how to update ?
-
-we will write the function name and pass it new data which we want to show
+So we will create one more state var(searchText) and bind it with input box
 
 ```jsx
-// Written in body component
-const [productList, setproductList] = useState(groProducts);
+const Body = () => {
+  
+  const [searchText,setsearchText] = useState("");
 
-onClick={() => {
-            const filteredList = productList.filter(
-              (product) => product.rating > 4,
-            );
-            setproductList(filteredList)
-          }}
+<div className="filter">
+
+        <div className="search-container">
+          <input type="text" className="search-box" value={searchText} />
+          <button className="search-btn" onClick={()=>{
+            // filter products and update ui 
+            
+             console.log(searchText)
+            
+          }}>Search</button>
+        </div>
+        };
 ```
 
-If our product is normal js variable and we update our list The Ui will not be updated. But if we have super react variable it will keep the Ui insink with that varibale
+Now check is it working or not. When we will go to search and give any input our search box is not getting the input and also we will saw an error in console:
 
-When our state variable product list changes it automatically updates the Ui. This is called rendering
+Error :
 
-### Whenever state variable updates react will rerenders the components quickly
+You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+checkControlledValueProps @ react-dom_client.js?v=48de0e50:1187Understand this error
 
-Lets use our mock data now instead of our product list:
+Why this is happening? 
+
+we bind our value to the searchText state var and this variable is bind with input 
+
+whatever is in the searchText it is in the value and when we are changing the value the value is still tight to searchText var and not changing. our searchText is not getting updated so the value will not change. searchText is empty so input box will not change unless we change the searchText 
+
+So we have to declare onchange function which works when the input value changes onchage fun should also change the value and updates the searchText. and how we will update our searchText local state variable? (using set second parameter of useState)
 
 ```jsx
-import groProducts from "../../public/utils/mockdata";
-
- const [productList, setproductList] = useState(groProducts);
-
+<div className="search-container">
+          <input type="text" className="search-box" value={searchText} onChange={(e)=>{
+           setsearchText(e.target.value)
+          }}/>
 ```
 
-This is the power of react. If we have to do this in js we have write a lot of code but here we are writing simple and short code. This is the beauty of react. This is why react is most popular language in building Ui 
+Now we will get input in console.
 
-The logic of updating this Ui is known as rerendring
+### information:
 
-React is only good at Dom operation 
+Whenever we type in input box even a single word we are changing the local state variable and what happens when we change local state variable?
 
-### We can also write it in different way:
+### Always remember when we change the local state variable react re renders the component and it is re rendering the whole component.
+
+lets see in console is it rendering the whole component or not:
+
+how we can see this 
+
+write this code line in body 
+
+console.log("body rendered")
+
+Now go to console and refresh the page. now we will see body rendered 2 times message (why this is showing as 2 times because we are fetching the data also so after we fetch the data react re renders our component that’s why it is showing 2 times  )
+
+Now input any word or letter when we write even one word body rendered message is showing and as we are writing this message is getting updates and increasing 
+
+### State variable=⇒ whenever state variable update react triggers reconciliation cycle(re renders the component with the new data)
+
+This is the beauty of react. 
+
+### How react is so fast?
+
+because of reconciliation algorithm (react fibers=⇒ making reacts faster) 
+
+React has best algorithm of rendering. react is finding diff between older and newer virtual dom and it sees any small  changes  it updates it quickly
+
+### Now we have to write the filter logic and update our Ui:
 
 ```jsx
-const [productList, setproductList] = useState(groProducts);
-
+             const filteredProducts = productList.filter((res)=>{
+               return res.title.toLowerCase().includes(searchText.toLowerCase())
+              })
+              setproductList(filteredProducts)
+            }}
 ```
 
-What is it ? This is array destructuring. useState returns an array. 
+There is one bug which is that when we search  product and after searching we again search other product our page gets blank and shows noting .
+
+Try to solve this bug:
+
+ For this we create one more useState var:
+
+These lines are used for this :
 
 ```jsx
-// We can also write like this
-const arr = useState(groProducts);
+const Body = () => {
+ 
 
-const [productList, setproductList] = arr;
+  const [filteredList, setfilteredList] = useState([]);
+    setfilteredList(json?.products);
+     setfilteredList(filteredProducts);
+     <div className="super-saver">
+        {filteredList.map((product) => (
+          <Product key={product.id} groData={product} />
+        ))}
+      </div>
+    </div>
+  
 ```
 
-or like this:
-
-```jsx
-const arr = useState(groProducts);
-
-const productList =arr[0]
-const setproductList =arr[1]
-```
-
-### How react is doing this?
-
-### Reconciliation algorithm(React fiber(new way of finding diff and updating data)):
-
-Reconciliation =⇒ Whenever something change on Ui its called …
-
-Virtual Dom(normal js object) =⇒ Representation of actual Dom like body component (object)
-
-Actual Dom =⇒ tags like div inside div inside img tag
-
-<div>
-
-<div>
-
-<img>
-
-### Diff algorithm:
-
-finds out the difference between two virtual Dom. The updated virtual Dom & The previous virtual Dom
-
-It calcultes the difference and actually updates on every render cycle
-
-……………………………………………………………………………………………………………………………………………………………
-
-## Reconciliation (very important)
-
-When data changes:
-
-1. React creates a **new virtual tree**
-2. Compares it with old one
-3. Updates only what changed
-
-Fiber makes this:
-
-- faster
-- interruptible
-- prioritized
-
-# **React Fiber Architecture(Ai explains):**
-
-## 🧠 What React Fiber really is (simple)
-
-**React Fiber = a smarter engine inside React**
-
-Old React:
-
-- When something changed → React updated the whole UI **in one go**
-- If UI was big → app could lag or freeze
-
-Fiber changed that.
-
----
-
-## ⚡ Core idea
-
-👉 Instead of doing all work at once, React now:
-
-- Breaks work into **small pieces (fibers)**
-- Works on them **step by step**
-- Can **pause, resume, skip, or cancel**
-
-Think like this:
-
-- Old React = one long task (no breaks)
-- Fiber = task split into chunks (like levels in a game)
-- 
-
-## 🧩 What is a “Fiber”?
-
-👉 A fiber = **one unit of work**
-
-It represents:
-
-- A component
-- Its props
-- Its state
-- What needs to be updated
-
-Think of **React Fiber** as React getting a "brain upgrade" that allows it to multi-task.
-
-Before Fiber, React was like a worker who had to finish every single task on their desk before taking a break. If a huge task came in, the worker would stay glued to their seat, ignoring everything else—including the phone ringing or someone knocking at the door. In browser terms, this meant if React was busy rendering a huge list, the page would "freeze" and couldn't respond to clicks or typing.
-
-Fiber changed that. Here is the breakdown of how it works from a high-level engineering perspective:
-
----
-
-## 1. The Core Shift: From "Stack" to "Fiber"
-
-In the old days (React 15 and earlier), React used the built-in JavaScript **Call Stack**. Once it started rendering, it didn't stop until the stack was empty.
-
-**Fiber** is essentially a **virtual re-implementation of the call stack.**
-
-- Instead of using the engine's stack, React now creates "Fiber objects" (units of work).
-- Because React now "owns" the stack, it can stop execution, go do something else (like handle a click), and then come back to exactly where it left off.
-
----
-
-## 2. Scheduling: The "Smart Manager"
-
-The headline feature of Fiber is **Scheduling**. It treats updates like a priority queue rather than "first come, first served."
-
-- **High Priority:** User typing, animations, button clicks. These need immediate feedback (60fps).
-- **Low Priority:** Fetching data for a hidden list, logging analytics, or rendering off-screen content.
-
-If React is busy rendering a heavy background report and the user clicks a "Cancel" button, Fiber **pauses** the low-priority report work, handles the click immediately, and then decides whether to finish the report or throw it away.
-
----
-
-## 3. The "Two-Phase" System
-
-To make this pausing and resuming safe, Fiber splits work into two phases:
-
-### Phase 1: Reconciliation (The "Drafting" Phase)
-
-- **What happens:** React builds a "Work-in-Progress" tree. It figures out what needs to change (diffing).
-- **Key trait:** This phase is **asynchronous**. It can be paused, aborted, or restarted without the user seeing anything broken.
-- **Why it matters:** This is where the heavy lifting happens.
-
-### Phase 2: Commit (The "Publishing" Phase)
-
-- **What happens:** React takes the computed changes and applies them to the actual DOM.
-- **Key trait:** This phase is **synchronous**. Once it starts, it doesn't stop. This ensures the UI doesn't look "half-finished" or glitchy.
-
----
-
-## 4. The Linked List Structure
-
-Standard trees are hard to traverse if you need to stop in the middle. Fiber solves this by turning the tree into a **Singly Linked List** of "work units."
-
-Each Fiber node points to:
-
-- **Child:** Its first child.
-- **Sibling:** The next element next to it.
-- **Return:** Its parent (where to go back to after work is done).
-
-This structure allows React to walk the tree manually. If it runs out of time in the current "frame," it just saves a pointer to the current Fiber node and resumes from that pointer in the next frame.
-
----
-
-## Summary for the Dev Standup
-
-- **The Problem:** Synchronous rendering blocks the main thread (jank).
-- **The Solution:** Fiber breaks rendering into small, incremental chunks.
-- **The Result:** **Concurrency.** The ability to work on multiple tasks at once, prioritizing the ones that keep the app feeling snappy.
-
-Essentially, Fiber turned React from a "rendering engine" into a **"work scheduler."**
+full updated code is given below:

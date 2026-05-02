@@ -1,91 +1,71 @@
 import Product from "./Product";
-import groProducts from "../../public/utils/mockdata";
 
-import { IMG_URL } from "../../public/utils/constants";
-import { THUMBNAIL_URL } from "../../public/utils/constants";
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Shimmer from "./Shimmer";
 
 const Body = () => {
-  // Using our mockData
-  const [productList, setproductList] = useState(groProducts);
+  const [productList, setproductList] = useState([]);
 
-  // Another way to write the upper code of line:
-  // const arr = useState(groProducts);
+  const [searchText, setsearchText] = useState("");
 
-  // const [productList, setproductList] = arr;
-  // const productList =arr[0]
-  // const setproductList =arr[1]
+  const [filteredList, setfilteredList] = useState([]);
 
-  // local state variable - powerful variable
-  // let [productList,setproductList]=useState([    {
-  //       id: 1,
-  //       title: "Essence Mascara Lash Princess",
-  //       category: "beauty",
-  //       price: 9.99,
-  //       rating: 4.1,
-  //       stock: 99,
-  //       images: [
-  //       {IMG_URL},
-  //       ],
-  //       thumbnail:
-  //       THUMBNAIL_URL
-  //     },
-  //     {
-  //       id: 2,
-  //       title: "Eyeshadow Palette with Mirror",
-  //       price: 19.99,
-  //       rating: 2.86,
-  //       stock: 34,
+  const fetchData = async () => {
+    const data = await fetch(
+      "https://dummyjson.com/products/category/groceries",
+    );
 
-  //       images: [
-  //         "https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/1.webp",
-  //       ],
-  //       thumbnail:
-  //         "https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/thumbnail.webp",
-  //     },]);
+    const json = await data.json();
 
-  // Local state Variable - powerful variable
-  // const [productList,setproductList]=useState([{
-  //       id: 1,
-  //       title: "Essence Mascara Lash Princess",
-  //       category: "beauty",
-  //       price: 9.99,
-  //       rating: 2.56,
-  //       stock: 99,
-  //       images: [IMG_URL],
-  //       thumbnail: THUMBNAIL_URL,
-  //     },
-  //     {
-  //       id: 2,
-  //       title: "Eyeshadow Palette with Mirror",
-  //       price: 19.99,
-  //       rating: 4.3,
-  //       stock: 34,
+    // optional chaining
+    setproductList(json?.products);
+    setfilteredList(json?.products);
+  };
 
-  //       images: [
-  //         "https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/1.webp",
-  //       ],
-  //       thumbnail:
-  //         "https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/thumbnail.webp",
-  //     },
-  //     {
-  //       id: 6,
-  //       title: "Eyeshadow Palette with Mirror",
-  //       price: 19.99,
-  //       rating: 4.3,
-  //       stock: 34,
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-  //       images: [
-  //         "https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/1.webp",
-  //       ],
-  //       thumbnail:
-  //         "https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/thumbnail.webp",
-  //     },]);
+  // conditional rendering
+  // if(productList.length===0){
+  //   return <Shimmer/>
+  // }
 
-  return (
+  console.log("body rendered");
+
+  return productList.length === 0 ? (
+    <Shimmer />
+  ) : (
     <div className="body">
       <div className="filter">
+        <div className="search-container">
+          <input
+            type="text"
+            className="search-box"
+            value={searchText}
+            onChange={(e) => {
+              setsearchText(e.target.value);
+            }}
+          />
+          <button
+            className="search-btn"
+            onClick={() => {
+              // filter products and update ui
+
+              console.log(searchText);
+
+              const filteredProducts = productList.filter((res) => {
+                return res.title
+                  .toLowerCase()
+                  .includes(searchText.toLowerCase());
+              });
+              setfilteredList(filteredProducts);
+            }}
+          >
+            Search
+          </button>
+        </div>
+
         <button
           className="filter-btn"
           onClick={() => {
@@ -101,7 +81,7 @@ const Body = () => {
       </div>
 
       <div className="super-saver">
-        {productList.map((product) => (
+        {filteredList.map((product) => (
           <Product key={product.id} groData={product} />
         ))}
       </div>
