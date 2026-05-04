@@ -1,19 +1,16 @@
 
-
+// groData is the prop 
 
 const Product = ({ groData }) => {
-  const {thumbnail,title,price,rating,stock} =groData
+  const {product_name,brands,ecoscore_grade,image_front_small_url,quantity} =groData
   return (
     <div className="product">
-      <img
-        className="product-img"
-        src={thumbnail}
-        alt={title}
-      />
-      <h4>{title}</h4>
-      <h4>Price: ${price}</h4>
-      <h4>Rating: {rating}</h4>
-      <h4>({stock}) In Stock</h4>
+      <div><img className="product-img" src={image_front_small_url} alt="" /></div>
+      <span>{product_name} -</span>
+      <span>{quantity}</span>
+      <p>{brands}</p>
+      <p>Eco Score: {ecoscore_grade || "N/A"}</p>
+  {/* <p>Nutri Score: {groData.nutriscore_grade || "N/A"}</p> */}
       <button className="buttons">Add to cart</button>
     </div>
   );

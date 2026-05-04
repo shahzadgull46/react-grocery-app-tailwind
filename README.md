@@ -1,6 +1,15 @@
 
 
-# React Learning – useEffect, State & Shimmer UI
+# 🛒 React Grocery App with Search & Shimmer UI## Screenshots
+
+### Home Page
+![Home Page](./assets/home-page.png)
+
+### Search Results
+![Search Results](./assets/search-results.png)
+
+### Shimmer Loading
+![Shimmer Loading](./assets/shimmer-loading.png) 
 
 ## 📌 Concepts Covered
 - Monolith vs Microservices
@@ -18,10 +27,10 @@
 - CSS
 
 ## 🚀 Features
-- Fetch API data
-- Search functionality
-- Shimmer loading UI
-- Dynamic rendering
+-- Real-time product search with instant filtering
+- API-driven product listing
+- Shimmer UI for better user experience during loading
+- Optimized rendering using React hooks
 
 ## 🧠 Key Learnings
 - useEffect runs after render
@@ -44,6 +53,11 @@ This app includes a dynamic search feature:
 - Used `onChange` to update input value
 - Applied `.filter()` on product list
 - Used `.includes()` for matching titles
+## ⚠️ Challenges Faced
+
+- Handling CORS issues while fetching API
+- Managing state updates efficiently
+- Avoiding unnecessary re-renders
 
 ### 💡 Code Snippet
 
@@ -574,5 +588,6 @@ const Body = () => {
     </div>
   
 ```
-
+### imp note: i praticed at dummy data then i realise to learn from live data then i make changes with my code according to live data 
 full updated code is given below:
+Now we are using live data of open food facts.
