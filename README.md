@@ -1,3 +1,9 @@
+# 🌐 Live Demo
+
+Experience the live version of the application deployed on Vercel:
+
+👉 https://react-grocery-app-tailwind.vercel.app
+
 # 🛒 Grocery App
 
 > A modern grocery shopping application built with **React.js** and upgraded using **Tailwind CSS** for a cleaner UI, better responsiveness, and improved developer experience.
